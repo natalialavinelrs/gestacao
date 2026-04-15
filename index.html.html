@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Minha Gestação Completa</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#d4856a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Gestação">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<!-- SEO / Share -->
+<meta name="description" content="Diário da gestação, checklist de enxoval e planejador financeiro — tudo em um só lugar.">
+<meta property="og:title" content="Minha Gestação Completa">
+<meta property="og:description" content="Organize sua gravidez do início ao fim com carinho.">
+<meta property="og:image" content="icon-512.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdf8f3;
+    --blush: #f2c4b0;
+    --rose: #d4856a;
+    --deep: #3d2314;
+    --sage: #b5c4b1;
+    --sage-dark: #7a9474;
+    --soft: #f9ede6;
+    --white: #ffffff;
+    --shadow: rgba(61,35,20,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--deep);
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #f9ede6 0%, #fdf0e8 60%, #ede8f5 100%);
+    text-align: center;
+    padding: 56px 24px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    background: radial-gradient(circle, #f2c4b099 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, #b5c4b166 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--blush);
+    color: var(--deep);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 6vw, 48px);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    color: var(--deep);
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--rose);
+  }
+  .hero p {
+    font-size: 15px;
+    color: #7a5a4a;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* TABS */
+  .tabs-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 28px 16px 0;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    background: var(--white);
+    border: 2px solid #e8d5c9;
+    color: #9a7060;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .tab-btn:hover { border-color: var(--rose); color: var(--rose); }
+  .tab-btn.active {
+    background: var(--rose);
+    border-color: var(--rose);
+    color: white;
+    box-shadow: 0 4px 14px rgba(212,133,106,0.35);
+  }
+  .tab-icon { font-size: 16px; }
+
+  /* SECTIONS */
+  .section {
+    display: none;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+  .section.active { display: block; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--deep);
+  }
+  .section-sub {
+    font-size: 14px;
+    color: #9a7060;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 16px var(--shadow);
+    border: 1px solid #f0e4dc;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .card-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .card-icon.rose { background: #fdeee8; }
+  .card-icon.sage { background: #eaf0e9; }
+  .card-icon.lavender { background: #ede8f5; }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--deep);
+  }
+  .card-week {
+    font-size: 12px;
+    color: #b08070;
+    font-weight: 500;
+  }
+
+  /* FORM ELEMENTS */
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #9a7060;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  textarea,
+  select {
+    width: 100%;
+    background: var(--soft);
+    border: 1.5px solid #e8d5c9;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--deep);
+    outline: none;
+    transition: border 0.2s;
+    margin-bottom: 14px;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--rose);
+    background: var(--white);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  /* MOOD */
+  .mood-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .mood-btn {
+    background: var(--soft);
+    border: 2px solid #e8d5c9;
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .mood-btn:hover, .mood-btn.selected {
+    background: #fdeee8;
+    border-color: var(--rose);
+    color: var(--rose);
+  }
+
+  /* CHECKLIST */
+  .checklist-group { margin-bottom: 20px; }
+  .checklist-group-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--rose);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #f0e4dc;
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+  .check-item:hover { background: var(--soft); }
+  .check-item input[type="checkbox"] {
+    width: 18px; height: 18px;
+    accent-color: var(--rose);
+    margin: 0; padding: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .check-label {
+    flex: 1;
+    font-size: 14px;
+    color: var(--deep);
+    cursor: pointer;
+    margin: 0;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+  .check-item.done .check-label {
+    text-decoration: line-through;
+    color: #b08070;
+  }
+  .qty-input {
+    width: 56px !important;
+    text-align: center;
+    margin: 0 !important;
+    padding: 6px 8px !important;
+    font-size: 13px !important;
+  }
+  .price-input {
+    width: 90px !important;
+    text-align: right;
+    margin: 0 !important;
+    padding: 6px 8px !important;
+    font-size: 13px !important;
+  }
+
+  /* PROGRESS */
+  .progress-bar-wrap {
+    background: #f0e4dc;
+    border-radius: 10px;
+    height: 8px;
+    margin: 10px 0 4px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--blush), var(--rose));
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    font-size: 12px;
+    color: #9a7060;
+    text-align: right;
+  }
+
+  /* FINANCE */
+  .finance-summary {
+    background: linear-gradient(135deg, #3d2314, #6b3a28);
+    border-radius: 18px;
+    padding: 24px;
+    color: white;
+    margin-bottom: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .finance-summary::after {
+    content: '✦';
+    position: absolute;
+    right: 20px; top: 16px;
+    font-size: 40px;
+    opacity: 0.08;
+  }
+  .finance-summary-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 6px;
+  }
+  .finance-summary-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .finance-pills {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .finance-pill {
+    background: rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+  }
+
+  .finance-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0e4dc;
+  }
+  .finance-row:last-child { border-bottom: none; }
+  .finance-row-label { font-size: 14px; color: var(--deep); }
+  .finance-row-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--rose);
+    white-space: nowrap;
+  }
+
+  /* SAVE BTN */
+  .btn-save {
+    background: var(--rose);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+    margin-top: 8px;
+    box-shadow: 0 4px 14px rgba(212,133,106,0.30);
+  }
+  .btn-save:hover {
+    background: #c0705a;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(212,133,106,0.40);
+  }
+
+  .btn-secondary {
+    background: var(--soft);
+    color: var(--rose);
+    border: 2px solid var(--blush);
+    border-radius: 14px;
+    padding: 11px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: #fdeee8; }
+
+  /* WEEK GRID */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+  .week-pill {
+    background: var(--soft);
+    border: 1.5px solid #e8d5c9;
+    border-radius: 10px;
+    padding: 8px 4px;
+    text-align: center;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+  }
+  .week-pill:hover { border-color: var(--rose); color: var(--rose); }
+  .week-pill.filled { background: #fdeee8; border-color: var(--blush); }
+  .week-pill.current { background: var(--rose); border-color: var(--rose); color: white; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--deep);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: transform 0.3s ease;
+    z-index: 999;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #e8d5c9, transparent);
+    margin: 20px 0;
+  }
+
+  .tag {
+    display: inline-block;
+    background: #eaf0e9;
+    color: var(--sage-dark);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  @media (max-width: 480px) {
+    .field-row { grid-template-columns: 1fr; }
+    .hero { padding: 40px 20px 32px; }
+  }
+
+  /* HISTÓRICO */
+  .historico-entry {
+    border-left: 3px solid var(--blush);
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    border-radius: 0 14px 14px 0;
+    background: var(--soft);
+  }
+  .historico-entry:last-child { margin-bottom: 0; }
+  .historico-semana {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--deep);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .historico-data { font-size: 11px; color: #b08070; font-weight: 400; font-family: 'DM Sans', sans-serif; }
+  .historico-humor { font-size: 13px; margin-bottom: 6px; }
+  .historico-campo { font-size: 13px; color: #9a7060; margin-bottom: 4px; line-height: 1.5; }
+  .historico-campo strong { color: var(--deep); font-weight: 500; }
+  .historico-mensagem {
+    margin-top: 10px;
+    background: white;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--deep);
+    line-height: 1.6;
+    border-left: 2px solid var(--blush);
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">✦ Kit Digital Completo</div>
+  <h1>Maternidade <em>Completa</em></h1>
+  <p>Seu diário de gestação, checklist de enxoval e planejador financeiro — tudo em um só lugar.</p>
+</div>
+
+<div class="tabs-wrapper">
+  <button class="tab-btn active" onclick="showTab('diario')">
+    <span class="tab-icon">🌸</span> Diário
+  </button>
+  <button class="tab-btn" onclick="showTab('enxoval')">
+    <span class="tab-icon">🍼</span> Enxoval
+  </button>
+  <button class="tab-btn" onclick="showTab('financeiro')">
+    <span class="tab-icon">💛</span> Financeiro
+  </button>
+</div>
+
+<!-- ===================== DIÁRIO ===================== -->
+<div id="diario" class="section active">
+  <div class="section-title">Diário da Gestação 🌸</div>
+  <p class="section-sub">Registre cada semana da sua jornada. Esses momentos são únicos e merecem ser lembrados.</p>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon rose">👶</div>
+      <div>
+        <div class="card-title">Informações da Gestação</div>
+        <div class="card-week">Dados gerais</div>
+      </div>
+    </div>
+    <label>Nome da bebê / apelido</label>
+    <input type="text" id="baby-name" placeholder="Ex: Valentina, Princesa, Bolinha...">
+    <div class="field-row">
+      <div>
+        <label>Data prevista do parto (DPP)</label>
+        <input type="date" id="dpp">
+      </div>
+      <div>
+        <label>Semana atual</label>
+        <input type="number" id="semana-atual" min="1" max="42" placeholder="Ex: 24">
+      </div>
+    </div>
+    <label>Nome da mamãe</label>
+    <input type="text" id="mae-nome" placeholder="Seu nome">
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon lavender">✍️</div>
+      <div>
+        <div class="card-title">Registro Semanal</div>
+        <div class="card-week">Como você está hoje?</div>
+      </div>
+    </div>
+
+    <label>Semana que está registrando</label>
+    <input type="number" id="registro-semana" min="1" max="42" placeholder="Ex: 20">
+
+    <label>Como está seu humor hoje?</label>
+    <div class="mood-row">
+      <button class="mood-btn" onclick="selectMood(this)">😊 Feliz</button>
+      <button class="mood-btn" onclick="selectMood(this)">😢 Emotiva</button>
+      <button class="mood-btn" onclick="selectMood(this)">😴 Cansada</button>
+      <button class="mood-btn" onclick="selectMood(this)">🤢 Enjoada</button>
+      <button class="mood-btn" onclick="selectMood(this)">✨ Radiante</button>
+      <button class="mood-btn" onclick="selectMood(this)">😤 Irritada</button>
+    </div>
+
+    <label>Sintomas desta semana</label>
+    <input type="text" id="sintomas" placeholder="Ex: enjoo, azia, cansaço...">
+
+    <label>Desejo do momento 🍫</label>
+    <input type="text" id="desejo" placeholder="Ex: chocolate com batata frita...">
+
+    <label>Mensagem para o(a) bebê 💌</label>
+    <textarea id="mensagem" placeholder="Escreva o que sente, o que sonha, o que quer contar para ele(a) um dia..."></textarea>
+
+    <label>Tamanho do bebê esta semana</label>
+    <input type="text" id="tamanho" placeholder="Ex: do tamanho de uma manga...">
+
+    <label>Marcos especiais desta semana</label>
+    <input type="text" id="marcos" placeholder="Ex: senti o primeiro chutinho!">
+
+    <button class="btn-save" onclick="salvarRegistro()">💾 Salvar este registro</button>
+  </div>
+
+  <div class="card" id="semanas-card" style="display:none">
+    <div class="card-header">
+      <div class="card-icon sage">📅</div>
+      <div>
+        <div class="card-title">Semanas registradas</div>
+        <div class="card-week">Clique em uma semana para ver o registro</div>
+      </div>
+    </div>
+    <div class="week-grid" id="week-grid"></div>
+    <div id="registro-display"></div>
+  </div>
+
+  <div class="card" id="historico-card" style="display:none">
+    <div class="card-header">
+      <div class="card-icon lavender">📖</div>
+      <div>
+        <div class="card-title">Meu Diário Completo</div>
+        <div class="card-week">Todos os registros em ordem</div>
+      </div>
+    </div>
+    <button class="btn-secondary" onclick="toggleHistorico()" id="btn-historico" style="width:100%;margin-bottom:0">📖 Ver todos os registros</button>
+    <div id="historico-lista" style="display:none;margin-top:18px"></div>
+  </div>
+</div>
+
+<!-- ===================== ENXOVAL ===================== -->
+<div id="enxoval" class="section">
+  <div class="section-title">Checklist de Enxoval 🍼</div>
+  <p class="section-sub">Marque o que já tem, defina quantidades e não esqueça nada. A lista se salva automaticamente.</p>
+
+  <div class="card">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <div class="progress-text" id="progress-text">0 de 0 itens marcados</div>
+  </div>
+
+  <div class="card" id="enxoval-lista"></div>
+</div>
+
+<!-- ===================== FINANCEIRO ===================== -->
+<div id="financeiro" class="section">
+  <div class="section-title">Planejador Financeiro 💛</div>
+  <p class="section-sub">Estime os gastos da gestação e pós-parto para não ter surpresas.</p>
+
+  <div class="finance-summary">
+    <div class="finance-summary-label">Total estimado</div>
+    <div class="finance-summary-value" id="total-geral">R$ 0,00</div>
+    <div class="finance-pills">
+      <div class="finance-pill">🤰 Pré-natal: <span id="pill-prenatal">R$ 0</span></div>
+      <div class="finance-pill">🍼 Enxoval: <span id="pill-enxoval">R$ 0</span></div>
+      <div class="finance-pill">🏥 Parto: <span id="pill-parto">R$ 0</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon rose">🤰</div>
+      <div><div class="card-title">Pré-natal & Saúde</div></div>
+    </div>
+    <div id="cat-prenatal"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon lavender">🏥</div>
+      <div><div class="card-title">Parto & Maternidade</div></div>
+    </div>
+    <div id="cat-parto"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon sage">🛒</div>
+      <div><div class="card-title">Enxoval (importado do checklist)</div></div>
+    </div>
+    <div class="finance-row">
+      <div class="finance-row-label">Total do enxoval preenchido</div>
+      <div class="finance-row-value" id="enxoval-total-fin">R$ 0,00</div>
+    </div>
+    <p style="font-size:12px;color:#9a7060;margin-top:8px;">💡 Preencha preços no checklist de enxoval para atualizar aqui automaticamente.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon rose">🎯</div>
+      <div><div class="card-title">Meta de economia mensal</div></div>
+    </div>
+    <label>Quanto posso guardar por mês (R$)</label>
+    <input type="number" id="economia-mensal" placeholder="Ex: 500" oninput="calcMeta()">
+    <div class="finance-row" style="margin-top:8px;">
+      <div class="finance-row-label">Meses necessários para cobrir tudo</div>
+      <div class="finance-row-value" id="meses-necessarios">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- BANNER INSTALAR APP -->
+<div id="install-banner" style="display:none;position:fixed;bottom:80px;left:16px;right:16px;z-index:200;background:#3d2314;border-radius:18px;padding:16px 18px;align-items:center;gap:14px;box-shadow:0 8px 30px rgba(61,35,20,0.35)">
+  <div style="font-size:28px;flex-shrink:0">📲</div>
+  <div style="flex:1">
+    <div style="font-size:13px;font-weight:600;color:white;margin-bottom:2px">Adicionar à tela inicial</div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.55)">Use como app, funciona offline</div>
+  </div>
+  <button onclick="instalarApp()" style="background:var(--rose);color:white;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif">Instalar</button>
+  <button onclick="fecharInstall()" style="background:none;border:none;color:rgba(255,255,255,0.4);font-size:18px;cursor:pointer;padding:0;line-height:1">✕</button>
+</div>
+
+<div class="toast" id="toast">✓ Salvo com sucesso!</div>
+
+<!-- MODAL -->
+<div id="modal-apagar" style="display:none;position:fixed;inset:0;z-index:1000;align-items:center;justify-content:center;padding:24px">
+  <div id="modal-overlay" style="position:absolute;inset:0;background:rgba(46,26,14,0.55);backdrop-filter:blur(3px)" onclick="fecharModal()"></div>
+  <div style="position:relative;background:white;border-radius:22px;padding:28px 24px;max-width:340px;width:100%;box-shadow:0 16px 48px rgba(46,26,14,0.2);text-align:center">
+    <div style="font-size:36px;margin-bottom:12px">🗑️</div>
+    <div style="font-family:Playfair Display,serif;font-size:18px;font-weight:600;color:#2e1a0e;margin-bottom:8px">Apagar registro?</div>
+    <p id="modal-texto" style="font-size:14px;color:#9a7060;line-height:1.6;margin-bottom:22px"></p>
+    <div style="display:flex;gap:10px">
+      <button onclick="fecharModal()" style="flex:1;background:#f5ece0;color:#8a6a58;border:none;border-radius:12px;padding:12px;font-size:14px;font-weight:500;cursor:pointer">Cancelar</button>
+      <button id="modal-confirmar" style="flex:1;background:#c05050;color:white;border:none;border-radius:12px;padding:12px;font-size:14px;font-weight:500;cursor:pointer">Sim, apagar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DADOS GLOBAIS (declarados primeiro para evitar erros de inicialização) =====
+const enxovalData = [
+  { cat: '👕 Roupinhas', items: [
+    'Bodies manga curta (RN)', 'Bodies manga longa (RN)', 'Bodies manga curta (1-3m)',
+    'Macacões', 'Pijamas', 'Meias', 'Luvas anticoço', 'Toucas', 'Saídas de maternidade'
+  ]},
+  { cat: '🛏️ Enxoval de cama', items: [
+    'Lençóis para berço (3)', 'Cobertores (2)', 'Almofada de amamentação',
+    'Travesseiro anti-refluxo', 'Protetor de berço', 'Trocador'
+  ]},
+  { cat: '🛁 Banho & Higiene', items: [
+    'Banheira', 'Toalhas felpudas com capuz (3)', 'Sabonete líquido bebê',
+    'Shampoo bebê', 'Creme para assaduras', 'Algodão', 'Termômetro de banho',
+    'Suporte para banheira'
+  ]},
+  { cat: '🍼 Alimentação', items: [
+    'Mamadeiras (2-3)', 'Chupetas (2)', 'Esterilizador',
+    'Escova para mamadeira', 'Almofada de amamentação', 'Conchas para seios'
+  ]},
+  { cat: '🚗 Passeio & Segurança', items: [
+    'Cadeirinha para carro', 'Carrinho de bebê', 'Bebê conforto',
+    'Bolsa maternidade', 'Monitor de bebê'
+  ]},
+  { cat: '🏥 Saúde', items: [
+    'Termômetro digital', 'Aspirador nasal', 'Cortador de unhas bebê',
+    'Kit primeiros socorros', 'Umidificador de ar'
+  ]}
+];
+
+const finCategories = {
+  prenatal: [
+    { label: 'Consultas de pré-natal', key: 'consultas' },
+    { label: 'Exames laboratoriais', key: 'exames' },
+    { label: 'Ultrassonografias', key: 'ultrassom' },
+    { label: 'Vitaminas e suplementos', key: 'vitaminas' },
+    { label: 'Roupas gestante', key: 'roupas-mae' },
+  ],
+  parto: [
+    { label: 'Taxa hospitalar / maternidade', key: 'hospital' },
+    { label: 'Honorários médicos', key: 'medico' },
+    { label: 'Anestesista', key: 'anestesista' },
+    { label: 'Pediatra na sala de parto', key: 'pediatra-parto' },
+    { label: 'Fotos e vídeo do nascimento', key: 'fotos' },
+    { label: 'Pós-parto / resguardo', key: 'pos-parto' },
+  ]
+};
+
+let enxovalState = JSON.parse(localStorage.getItem('enxoval_state') || '{}');
+let finState = JSON.parse(localStorage.getItem('fin_state') || '{}');
+
+// ===== UTILS =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function showTab(tab) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+function fmtMoney(v) {
+  return 'R$ ' + parseFloat(v||0).toLocaleString('pt-BR', {minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+// ===== DIÁRIO =====
+let registros = JSON.parse(localStorage.getItem('diario_registros') || '{}');
+let selectedMood = '';
+
+function selectMood(btn) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedMood = btn.textContent.trim();
+}
+
+function salvarRegistro() {
+  const semana = document.getElementById('registro-semana').value;
+  if (!semana) { showToast('⚠️ Informe a semana!'); return; }
+  registros[semana] = {
+    humor: selectedMood,
+    sintomas: document.getElementById('sintomas').value,
+    desejo: document.getElementById('desejo').value,
+    mensagem: document.getElementById('mensagem').value,
+    tamanho: document.getElementById('tamanho').value,
+    marcos: document.getElementById('marcos').value,
+    data: new Date().toLocaleDateString('pt-BR')
+  };
+  localStorage.setItem('diario_registros', JSON.stringify(registros));
+  // salvar info geral
+  localStorage.setItem('diario_geral', JSON.stringify({
+    babyName: document.getElementById('baby-name').value,
+    dpp: document.getElementById('dpp').value,
+    semanaAtual: document.getElementById('semana-atual').value,
+    maeNome: document.getElementById('mae-nome').value
+  }));
+  renderWeekGrid();
+  showToast('💖 Semana ' + semana + ' salva!');
+}
+
+function renderWeekGrid() {
+  const card = document.getElementById('semanas-card');
+  const grid = document.getElementById('week-grid');
+  const keys = Object.keys(registros);
+  if (keys.length === 0) {
+    card.style.display = 'none';
+    document.getElementById('historico-card').style.display = 'none';
+    return;
+  }
+  card.style.display = 'block';
+  document.getElementById('historico-card').style.display = 'block';
+  grid.innerHTML = '';
+  const semanaAtual = parseInt(document.getElementById('semana-atual').value || 0);
+  for (let i = 1; i <= 40; i++) {
+    const pill = document.createElement('div');
+    pill.className = 'week-pill' + (registros[i] ? ' filled' : '') + (i == semanaAtual ? ' current' : '');
+    pill.textContent = i + 'ª';
+    pill.title = 'Semana ' + i;
+    if (registros[i]) pill.onclick = () => mostrarRegistro(i);
+    grid.appendChild(pill);
+  }
+}
+
+function toggleHistorico() {
+  const lista = document.getElementById('historico-lista');
+  const btn = document.getElementById('btn-historico');
+  const aberto = lista.style.display !== 'none';
+  if (aberto) {
+    lista.style.display = 'none';
+    btn.textContent = '📖 Ver todos os registros';
+  } else {
+    lista.style.display = 'block';
+    btn.textContent = '✕ Fechar diário';
+    renderHistorico();
+  }
+}
+
+function entryActionsHTML(semana) {
+  return `
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button onclick="editarRegistro(${semana})"
+        style="flex:1;background:#fdeee8;color:var(--rose);border:1.5px solid var(--blush);border-radius:10px;padding:7px 12px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif">
+        ✏️ Editar
+      </button>
+      <button onclick="apagarRegistro(${semana})"
+        style="flex:1;background:#fff0f0;color:#c05050;border:1.5px solid #f0c0c0;border-radius:10px;padding:7px 12px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif">
+        🗑️ Apagar
+      </button>
+    </div>
+  `;
+}
+
+function renderHistorico() {
+  const lista = document.getElementById('historico-lista');
+  const semanas = Object.keys(registros).map(Number).sort((a,b) => a - b);
+  if (semanas.length === 0) {
+    lista.innerHTML = '<p style="text-align:center;color:#b08070;font-size:14px;padding:16px">Nenhum registro ainda. Comece escrevendo sobre a semana atual! 🌸</p>';
+    return;
+  }
+  const babyName = document.getElementById('baby-name').value || 'bebê';
+  lista.innerHTML = semanas.map(semana => {
+    const r = registros[semana];
+    return `
+      <div class="historico-entry">
+        <div class="historico-semana">
+          <span>🌸 Semana ${semana}</span>
+          <span class="historico-data">${r.data || ''}</span>
+        </div>
+        ${r.humor ? `<div class="historico-humor">${r.humor}</div>` : ''}
+        ${r.tamanho ? `<div class="historico-campo">📏 <strong>Tamanho do ${babyName}:</strong> ${r.tamanho}</div>` : ''}
+        ${r.marcos ? `<div class="historico-campo">✨ <strong>Marco especial:</strong> ${r.marcos}</div>` : ''}
+        ${r.sintomas ? `<div class="historico-campo">🩺 <strong>Sintomas:</strong> ${r.sintomas}</div>` : ''}
+        ${r.desejo ? `<div class="historico-campo">🍫 <strong>Desejo:</strong> ${r.desejo}</div>` : ''}
+        ${r.mensagem ? `<div class="historico-mensagem">💌 "${r.mensagem}"</div>` : ''}
+        ${entryActionsHTML(semana)}
+      </div>
+    `;
+  }).join('');
+}
+
+function mostrarRegistro(semana) {
+  const r = registros[semana];
+  if (!r) return;
+  const d = document.getElementById('registro-display');
+  d.innerHTML = `
+    <div class="divider"></div>
+    <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:600;margin-bottom:10px;color:var(--deep)">
+      Semana ${semana} · ${r.data}
+    </div>
+    ${r.humor ? `<div style="margin-bottom:6px;font-size:14px">${r.humor}</div>` : ''}
+    ${r.marcos ? `<div style="margin-bottom:6px;font-size:13px;color:#7a5a4a">✨ ${r.marcos}</div>` : ''}
+    ${r.sintomas ? `<div style="margin-bottom:6px;font-size:13px;color:#9a7060">Sintomas: ${r.sintomas}</div>` : ''}
+    ${r.desejo ? `<div style="margin-bottom:6px;font-size:13px;color:#9a7060">🍫 Desejo: ${r.desejo}</div>` : ''}
+    ${r.mensagem ? `<div style="margin-top:10px;background:var(--soft);border-radius:12px;padding:14px;font-size:14px;line-height:1.6;font-style:italic;color:var(--deep)">"${r.mensagem}"</div>` : ''}
+    ${entryActionsHTML(semana)}
+  `;
+}
+
+function editarRegistro(semana) {
+  const r = registros[semana];
+  if (!r) return;
+  // Preenche o formulário com os dados do registro
+  document.getElementById('registro-semana').value = semana;
+  document.getElementById('sintomas').value = r.sintomas || '';
+  document.getElementById('desejo').value = r.desejo || '';
+  document.getElementById('mensagem').value = r.mensagem || '';
+  document.getElementById('tamanho').value = r.tamanho || '';
+  document.getElementById('marcos').value = r.marcos || '';
+  // Seleciona o humor
+  selectedMood = r.humor || '';
+  document.querySelectorAll('.mood-btn').forEach(b => {
+    b.classList.toggle('selected', b.textContent.trim() === selectedMood);
+  });
+  // Rola até o formulário
+  document.getElementById('registro-semana').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  showToast('✏️ Semana ' + semana + ' carregada para edição');
+}
+
+function apagarRegistro(semana) {
+  const modal = document.getElementById('modal-apagar');
+  document.getElementById('modal-texto').textContent = 'O registro da semana ' + semana + ' será apagado permanentemente.';
+  modal.style.display = 'flex';
+  document.getElementById('modal-confirmar').onclick = function() {
+    delete registros[semana];
+    localStorage.setItem('diario_registros', JSON.stringify(registros));
+    document.getElementById('registro-display').innerHTML = '';
+    fecharModal();
+    renderWeekGrid();
+    const lista = document.getElementById('historico-lista');
+    if (lista.style.display !== 'none') renderHistorico();
+    showToast('🗑️ Registro apagado');
+  };
+}
+
+function fecharModal() {
+  document.getElementById('modal-apagar').style.display = 'none';
+}
+
+// Restore saved
+(function() {
+  const g = JSON.parse(localStorage.getItem('diario_geral') || '{}');
+  if (g.babyName) document.getElementById('baby-name').value = g.babyName;
+  if (g.dpp) document.getElementById('dpp').value = g.dpp;
+  if (g.semanaAtual) document.getElementById('semana-atual').value = g.semanaAtual;
+  if (g.maeNome) document.getElementById('mae-nome').value = g.maeNome;
+  renderWeekGrid();
+})();
+
+// ===== ENXOVAL =====
+
+// Itens personalizados por categoria: { 'catIndex': ['item1', 'item2'] }
+let customItems = JSON.parse(localStorage.getItem('enxoval_custom') || '{}');
+
+function saveCustomItems() {
+  localStorage.setItem('enxoval_custom', JSON.stringify(customItems));
+}
+
+function addCustomItem(catIndex) {
+  const input = document.getElementById('new-item-' + catIndex);
+  const val = input.value.trim();
+  if (!val) return;
+  if (!customItems[catIndex]) customItems[catIndex] = [];
+  // evitar duplicata
+  if (customItems[catIndex].includes(val)) { input.value = ''; return; }
+  customItems[catIndex].push(val);
+  saveCustomItems();
+  input.value = '';
+  renderEnxoval();
+}
+
+function removeCustomItem(catIndex, item) {
+  customItems[catIndex] = customItems[catIndex].filter(i => i !== item);
+  delete enxovalState[item];
+  saveCustomItems();
+  localStorage.setItem('enxoval_state', JSON.stringify(enxovalState));
+  renderEnxoval();
+}
+
+function renderCheckItem(item, div, isCustom, catIndex) {
+  const key = item;
+  const state = enxovalState[key] || { checked: false, qty: 1, price: '' };
+  const row = document.createElement('div');
+  row.className = 'check-item' + (state.checked ? ' done' : '');
+  const safeKey = key.replace(/'/g, "\\'");
+  row.innerHTML = `
+    <input type="checkbox" ${state.checked ? 'checked' : ''} onchange="toggleCheck('${safeKey}', this)">
+    <span class="check-label" onclick="toggleCheckLabel('${safeKey}')">${item}</span>
+    <input type="number" class="qty-input" value="${state.qty||1}" min="1" max="20" title="Quantidade" onchange="updateQty('${safeKey}', this.value)">
+    <input type="number" class="price-input" value="${state.price||''}" placeholder="R$" title="Preço unit." onchange="updatePrice('${safeKey}', this.value)">
+    ${isCustom ? `<button onclick="removeCustomItem(${catIndex}, '${safeKey}')" title="Remover item" style="background:none;border:none;cursor:pointer;font-size:15px;color:#c0705a;padding:0 2px;flex-shrink:0">✕</button>` : ''}
+  `;
+  div.appendChild(row);
+}
+
+function renderEnxoval() {
+  const container = document.getElementById('enxoval-lista');
+  container.innerHTML = '';
+  enxovalData.forEach((grupo, catIndex) => {
+    const div = document.createElement('div');
+    div.className = 'checklist-group';
+    div.innerHTML = `<div class="checklist-group-title">${grupo.cat}</div>`;
+
+    // Itens padrão
+    grupo.items.forEach(item => renderCheckItem(item, div, false, catIndex));
+
+    // Itens personalizados
+    const extras = customItems[catIndex] || [];
+    extras.forEach(item => renderCheckItem(item, div, true, catIndex));
+
+    // Campo para adicionar novo item
+    const addRow = document.createElement('div');
+    addRow.style.cssText = 'display:flex;gap:8px;align-items:center;margin-top:10px;';
+    addRow.innerHTML = `
+      <input type="text" id="new-item-${catIndex}" placeholder="+ Adicionar item personalizado..."
+        style="flex:1;margin:0;font-size:13px;padding:8px 12px;background:#f9f4f0;border:1.5px dashed #e0c8bc;"
+        onkeydown="if(event.key==='Enter') addCustomItem(${catIndex})">
+      <button onclick="addCustomItem(${catIndex})"
+        style="background:var(--rose);color:white;border:none;border-radius:10px;padding:8px 14px;font-size:13px;cursor:pointer;white-space:nowrap;flex-shrink:0;">
+        Adicionar
+      </button>
+    `;
+    div.appendChild(addRow);
+    container.appendChild(div);
+  });
+  updateProgress();
+  updateEnxovalFinanceiro();
+}
+
+function toggleCheck(key, el) {
+  if (!enxovalState[key]) enxovalState[key] = { checked: false, qty: 1, price: '' };
+  enxovalState[key].checked = el.checked;
+  localStorage.setItem('enxoval_state', JSON.stringify(enxovalState));
+  renderEnxoval();
+}
+
+function toggleCheckLabel(key) {
+  if (!enxovalState[key]) enxovalState[key] = { checked: false, qty: 1, price: '' };
+  enxovalState[key].checked = !enxovalState[key].checked;
+  localStorage.setItem('enxoval_state', JSON.stringify(enxovalState));
+  renderEnxoval();
+}
+
+function updateQty(key, val) {
+  if (!enxovalState[key]) enxovalState[key] = { checked: false, qty: 1, price: '' };
+  enxovalState[key].qty = parseInt(val) || 1;
+  localStorage.setItem('enxoval_state', JSON.stringify(enxovalState));
+  updateEnxovalFinanceiro();
+}
+
+function updatePrice(key, val) {
+  if (!enxovalState[key]) enxovalState[key] = { checked: false, qty: 1, price: '' };
+  enxovalState[key].price = parseFloat(val) || '';
+  localStorage.setItem('enxoval_state', JSON.stringify(enxovalState));
+  updateEnxovalFinanceiro();
+}
+
+function updateProgress() {
+  let total = 0, done = 0;
+  enxovalData.forEach((g, catIndex) => {
+    g.items.forEach(item => {
+      total++;
+      if (enxovalState[item] && enxovalState[item].checked) done++;
+    });
+    (customItems[catIndex] || []).forEach(item => {
+      total++;
+      if (enxovalState[item] && enxovalState[item].checked) done++;
+    });
+  });
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `${done} de ${total} itens marcados (${pct}%)`;
+}
+
+function updateEnxovalFinanceiro() {
+  let total = 0;
+  enxovalData.forEach((g, catIndex) => {
+    const allItems = [...g.items, ...(customItems[catIndex] || [])];
+    allItems.forEach(item => {
+      const s = enxovalState[item];
+      if (s && s.price) total += (parseFloat(s.price)||0) * (parseInt(s.qty)||1);
+    });
+  });
+  const el = document.getElementById('enxoval-total-fin');
+  if (el) el.textContent = fmtMoney(total);
+  const pill = document.getElementById('pill-enxoval');
+  if (pill) pill.textContent = 'R$ ' + Math.round(total).toLocaleString('pt-BR');
+  updateTotalGeral();
+}
+
+renderEnxoval();
+
+// ===== FINANCEIRO =====
+
+function renderFinanceiro() {
+  ['prenatal','parto'].forEach(cat => {
+    const container = document.getElementById('cat-' + cat);
+    container.innerHTML = '';
+    finCategories[cat].forEach(item => {
+      const val = finState[item.key] || '';
+      const row = document.createElement('div');
+      row.className = 'finance-row';
+      row.innerHTML = `
+        <div class="finance-row-label">${item.label}</div>
+        <input type="number" class="price-input" value="${val}" placeholder="R$" 
+          onchange="updateFin('${item.key}', this.value)" style="width:100px!important">
+      `;
+      container.appendChild(row);
+    });
+  });
+  updateTotalGeral();
+}
+
+function updateFin(key, val) {
+  finState[key] = parseFloat(val) || 0;
+  localStorage.setItem('fin_state', JSON.stringify(finState));
+  updateTotalGeral();
+}
+
+function updateTotalGeral() {
+  let prenatal = 0, parto = 0;
+  finCategories.prenatal.forEach(i => prenatal += finState[i.key] || 0);
+  finCategories.parto.forEach(i => parto += finState[i.key] || 0);
+
+  let enxovalT = 0;
+  enxovalData.forEach((g, catIndex) => {
+    const allItems = [...g.items, ...(customItems[catIndex] || [])];
+    allItems.forEach(item => {
+      const s = enxovalState[item];
+      if (s && s.price) enxovalT += (parseFloat(s.price)||0) * (parseInt(s.qty)||1);
+    });
+  });
+
+  const total = prenatal + parto + enxovalT;
+  document.getElementById('total-geral').textContent = fmtMoney(total);
+  document.getElementById('pill-prenatal').textContent = 'R$ ' + Math.round(prenatal).toLocaleString('pt-BR');
+  document.getElementById('pill-parto').textContent = 'R$ ' + Math.round(parto).toLocaleString('pt-BR');
+  const el2 = document.getElementById('enxoval-total-fin');
+  if (el2) el2.textContent = fmtMoney(enxovalT);
+  calcMeta();
+}
+
+function calcMeta() {
+  const ec = parseFloat(document.getElementById('economia-mensal').value) || 0;
+  const totalEl = document.getElementById('total-geral');
+  const totalStr = totalEl.textContent.replace('R$ ','').replace(/\./g,'').replace(',','.');
+  const total = parseFloat(totalStr) || 0;
+  const el = document.getElementById('meses-necessarios');
+  if (ec > 0 && total > 0) {
+    const m = Math.ceil(total / ec);
+    el.textContent = m + ' meses';
+  } else {
+    el.textContent = '—';
+  }
+}
+
+renderFinanceiro();
+
+// ===== PWA: SERVICE WORKER =====
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('Service Worker registrado ✓'))
+      .catch(err => console.log('SW erro:', err));
+  });
+}
+
+// ===== PWA: BANNER "ADICIONAR À TELA INICIAL" =====
+let deferredPrompt = null;
+const installBanner = document.getElementById('install-banner');
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installBanner) installBanner.style.display = 'flex';
+});
+
+function instalarApp() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => {
+    deferredPrompt = null;
+    if (installBanner) installBanner.style.display = 'none';
+  });
+}
+
+function fecharInstall() {
+  if (installBanner) installBanner.style.display = 'none';
+}
+
+window.addEventListener('appinstalled', () => {
+  if (installBanner) installBanner.style.display = 'none';
+  showToast('💖 App instalado com sucesso!');
+});
+</body>
+</html>
